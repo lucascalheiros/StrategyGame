@@ -11,6 +11,10 @@ function love.load()
 		x = 400,
 		y = 250
 	}
+	actualTile = {
+		x = 0,
+		y = 0
+	}
 	tamX = 50
 	tamY = 50
 	map = createRandomTileMap(tamX, tamY, 1)
@@ -41,7 +45,7 @@ function love.update(dt)
 		selPos.x = 0
 		cameraMove(tamX, tamY, "left")
 	end
-	
+	setActualTile()
 		
 	
 end
@@ -51,9 +55,15 @@ function love.draw()
 	printMap(map)
 	love.graphics.setColor(0, 255, 0)
 	love.graphics.circle("fill", selPos.x, selPos.y, 20)
+	love.graphics.setColor(255, 0, 0)
+	love.graphics.print("Tile "..actualTile.x.." "..actualTile.y, 12, 26)
 	love.graphics.setColor(255, 255, 255)
 
+end
 
+function setActualTile()
+	actualTile.x = (selPos.x - selPos.x%50)/50 + camera.x
+	actualTile.y = (selPos.y - selPos.y%50)/50 + camera.y
 end
 
 
