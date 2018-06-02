@@ -1,12 +1,6 @@
 require "map"
 
 function love.load()
-	windowSize = {
-		x = 800,
-		y = 500
-	}
-    love.window.setMode( windowSize.x, windowSize.y)
-    love.window.setTitle( "Jogo estrategia" )
 	selPos = {
 		x = 400,
 		y = 250
@@ -46,12 +40,12 @@ function love.update(dt)
 		cameraMove(tamX, tamY, "left")
 	end
 	setActualTile()
-		
-	
+
+
 end
 
 function love.draw()
-	
+
 	printMap(map)
 	love.graphics.setColor(0, 255, 0)
 	love.graphics.circle("fill", selPos.x, selPos.y, 20)
@@ -65,6 +59,3 @@ function setActualTile()
 	actualTile.x = (selPos.x - selPos.x%50)/50 + camera.x
 	actualTile.y = (selPos.y - selPos.y%50)/50 + camera.y
 end
-
-
-
