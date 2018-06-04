@@ -1,62 +1,118 @@
-function createRandomTileMap(tamX, tamY, nRangeTile)
-	map = {}
-	math.randomseed(os.time())
-	for i = 1,tamY do
-		map[i] = {}
-		for j = 1,tamX do
-			map[i][j] = math.random(0,nRangeTile)
-		end
-	end
+Map = {}
+Map.__index = Map
 
-	return map
-end
-
-function cameraMove(tamX, tamY, position)
-	
-	if position == "up" then
-		camera.y = camera.y - 1
-	elseif position == "down" then
-		camera.y = camera.y + 1
-	elseif position == "left" then
-		camera.x = camera.x - 1
-	elseif position == "right" then
-		camera.x = camera.x + 1
-	end
-	if camera.x + 16 > tamX then
-		camera.x = tamX - 16
-	elseif camera.x < 1 then
-		camera.x = 1
-	elseif camera.y + 10 > tamY then
-		camera.y = tamY - 10
-	elseif camera.y < 1 then
-		camera.y = 1
-	end
-
-	
-	
-	
-end
-camera = {
+function Map:new()
+	self.size = {
+	x = 800,
+	y = 500
+	}
+--	Representa o numero da tile de posição superior esquerda da camera
+	self.camera = {
 	x = 1,
 	y = 1
-}
+	}
+--	Número de tiles que compõe a tela do jogo
+	self.tilesWindow = {
+	x = 16,
+	y = 10
+	}
+	tilesize = 50
+	return setmetatable(self,Map)
+end
 
+--#TODO criar mapa de verdade
+function Map:createRandomTileMap(tamX, tamY, nRangeTile)
+	self.map = {}
+	self.tamX = tamX +1
+	self.tamY = tamY +1
+	math.randomseed(os.time())
+	for i = 1,self.tamY do
+		self.map[i] = {}
+		for j = 1,self.tamX do
+			self.map[i][j] = math.random(0,nRangeTile)
+			if(i == tamY or j == tamX or i == 1 or j == 1) then
+				self.map[i][j] = 3
+			end
+		end
+	end
+end
+
+
+function Map:setCamPos(tileX,tileY) 
+	if tileX <= self.size.x and tileX >= 1 and tileY <= self.size.y and tileY >= 1 then
+		self.camera.x = tileX - (self.tilesWindow.x - self.tilesWindow.x % 2)/2
+		self.camera.y = tileY - (self.tilesWindow.x - self.tilesWindow.y % 2)/2
+		if self.camera.x < 1 then self.camera.x = 1 end
+		if self.camera.y < 1 then self.camera.y = 1 end
+--	#TODO fazer pra limitar posição abaixo
+	end
+end
+
+function Map:cameraPosition(selPos) 
+ 	if selPos.y + tileSize > map.size.y then
+ 		up()
+		Map:cameraMove("down")
+	elseif selPos.y - tileSize < 0 then
+		down()
+		Map:cameraMove("up")
+	elseif selPos.x + tileSize > map.size.x then
+		left()
+		Map:cameraMove("right")
+	elseif selPos.x - tileSize < 0 then
+		right()
+		Map:cameraMove("left")
+	end
+end
+
+function Map:cameraMove( position)
+	if position == "up" then
+		self.camera.y = self.camera.y - 1
+	elseif position == "down" then
+		self.camera.y = self.camera.y + 1
+	elseif position == "left" then
+		self.camera.x = self.camera.x - 1
+	elseif position == "right" then
+		self.camera.x = self.camera.x + 1
+	end
+	if self.camera.x + self.tilesWindow.x > self.tamX then
+		self.camera.x = self.tamX - self.tilesWindow.x
+	elseif self.camera.x < 1 then
+		self.camera.x = 1
+	elseif self.camera.y + self.tilesWindow.y > self.tamY then
+		self.camera.y = self.tamY - self.tilesWindow.y
+	elseif self.camera.y < 1 then
+		self.camera.y = 1
+	end
+end
+
+
+function Map:getActualTile(x,y)
+	actualTile = {
+	x = (x - x%50)/50 + self.camera.x,
+	y = (y - y%50)/50 + self.camera.y
+	}
+	return actualTile
+end
+
+--	em razão de testes
+function Map:getActualCamera(x,y)
+
+	return self.camera
+end
 	
-function printMap(map)
+function Map:print()
 	white = love.graphics.newImage( "white.png" )
 	black = love.graphics.newImage( "black.png" )
 	love.graphics.scale(2.5, 2.5)
 	size = 20
-    for i = camera.y, camera.y + 10 do
-        for j = camera.x , camera.x+16 do
-            if ( map[i][j] == 0)
-            then
-                love.graphics.draw(black, (j-camera.x-1)*size, (i-camera.y-1)*size)
-            else
-                love.graphics.draw(white, (j-camera.x-1)*size, (i-camera.y-1)*size)
+    for i = self.camera.y, self.camera.y + self.tilesWindow.y do
+        for j = self.camera.x , self.camera.x + self.tilesWindow.x do
+            if self.map[i][j] == 0 then
+                love.graphics.draw(black, (j-self.camera.x)*size, (i-self.camera.y)*size)
+            elseif self.map[i][j] == 1 then 
+                love.graphics.draw(white, (j-self.camera.x)*size, (i-self.camera.y)*size)
             end
         end
     end
 	love.graphics.scale(0.4, 0.4)
-
 end

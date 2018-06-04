@@ -1,13 +1,13 @@
 windowSize = {
     x = 800,
-    y = 500,
+    y = 650,
     sx = 1,
     sy = 1
 }
 
 function love.conf(t)
     t.identity = nil                   -- The name of the save directory (string)
-    t.version = "0.10.2"                -- The LÖVE version this game was made for (string)
+    t.version = "11.1"                -- The LÖVE version this game was made for (string)
     t.console = true                  -- Attach a console (boolean, Windows only)
 
     t.window.title = "Jogo estrategia" -- The window title (string)

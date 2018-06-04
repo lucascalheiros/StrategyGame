@@ -1,61 +1,52 @@
 require "map"
+require "input"
 
 function love.load()
 	selPos = {
-		x = 400,
-		y = 250
+		x = 75,
+		y = 425
 	}
-	actualTile = {
-		x = 0,
-		y = 0
-	}
+	actualTile = {}
+	camera ={}
+--	Tamanho do mapa em tiles
 	tamX = 50
 	tamY = 50
-	map = createRandomTileMap(tamX, tamY, 1)
-	love.keyboard.setKeyRepeat(true)
-
+--	Em pixeis
+	tileSize = 50
+	map = Map:new()
+	map:createRandomTileMap(tamX, tamY, 1)
+	input = Input:new()
+	delayClick = 0.17
+	map:setCamPos(2,49)
 end
 
 function love.update(dt)
-	if love.keyboard.isDown("up") then
-		selPos.y = selPos.y - 10
-	elseif love.keyboard.isDown("down") then
-		selPos.y = selPos.y + 10
-	elseif love.keyboard.isDown("right") then
-		selPos.x = selPos.x + 10
-	elseif love.keyboard.isDown("left") then
-		selPos.x = selPos.x - 10
-	end
- 	if selPos.y > windowSize.y then
-		selPos.y = windowSize.y
-		cameraMove(tamX, tamY, "down")
-	elseif selPos.y < 0 then
-		selPos.y = 0
-		cameraMove(tamX, tamY, "up")
-	elseif selPos.x > windowSize.x then
-		selPos.x = windowSize.x
-		cameraMove(tamX, tamY, "right")
-	elseif selPos.x < 0 then
-		selPos.x = 0
-		cameraMove(tamX, tamY, "left")
-	end
-	setActualTile()
 
+	input:downUp(delayClick,up)
+	input:downDn(delayClick,down)
+	input:downLt(delayClick,left)
+	input:downRt(delayClick,right)
+	map:cameraPosition(selPos)
+
+	actualTile = map:getActualTile(selPos.x, selPos.y)
+	camera = map:getActualCamera(selPos.x, selPos.y)
 
 end
 
 function love.draw()
 
-	printMap(map)
+	map:print()
 	love.graphics.setColor(0, 255, 0)
 	love.graphics.circle("fill", selPos.x, selPos.y, 20)
 	love.graphics.setColor(255, 0, 0)
 	love.graphics.print("Tile "..actualTile.x.." "..actualTile.y, 12, 26)
+	love.graphics.print("Camera "..camera.x.." "..camera.y, 12, 40)
 	love.graphics.setColor(255, 255, 255)
-
+	love.graphics.rectangle("fill", 0, 500, 800, 150 )
 end
 
-function setActualTile()
-	actualTile.x = (selPos.x - selPos.x%50)/50 + camera.x
-	actualTile.y = (selPos.y - selPos.y%50)/50 + camera.y
-end
+function up() selPos.y = selPos.y - tileSize end
+function down() selPos.y = selPos.y + tileSize end
+function left() selPos.x = selPos.x - tileSize end
+function right() selPos.x = selPos.x + tileSize end
+
