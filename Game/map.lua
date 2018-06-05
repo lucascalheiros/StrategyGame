@@ -2,20 +2,7 @@ Map = {}
 Map.__index = Map
 
 function Map:new()
-	self.size = {
-	x = 800,
-	y = 500
-	}
---	Representa o numero da tile de posição superior esquerda da camera
-	self.camera = {
-	x = 1,
-	y = 1
-	}
---	Número de tiles que compõe a tela do jogo
-	self.tilesWindow = {
-	x = 16,
-	y = 10
-	}
+
 	return setmetatable(self,Map)
 end
 
@@ -36,28 +23,26 @@ function Map:createRandomTileMap(tamX, tamY, nRangeTile)
 	end
 end
 
-
 function Map:setCamPos(tileX,tileY) 
-	if tileX <= self.size.x and tileX >= 1 and tileY <= self.size.y and tileY >= 1 then
-		self.camera.x = tileX - (self.tilesWindow.x - self.tilesWindow.x % 2)/2
-		self.camera.y = tileY - (self.tilesWindow.x - self.tilesWindow.y % 2)/2
-		if self.camera.x < 1 then self.camera.x = 1 end
-		if self.camera.y < 1 then self.camera.y = 1 end
---	#TODO fazer pra limitar posição abaixo
-	end
+	camera.x = tileX - (rangeWindow.x - rangeWindow.x % 2)/2
+	camera.y = tileY - (rangeWindow.y - rangeWindow.y % 2)/2
+	if camera.x < 1 then camera.x = 1 end
+	if camera.y < 1 then camera.y = 1 end
+	if camera.x >= self.tamX - rangeWindow.x then camera.x = self.tamX - rangeWindow.x end
+	if camera.y >= self.tamY - rangeWindow.y then camera.y = self.tamY - rangeWindow.y end
 end
 
-function Map:cameraPosition(selPos) 
- 	if selPos.y + tileSize > map.size.y then
+function Map:cameraPosition(x,y) 
+ 	if y >= rangeWindow.y then
  		up()
 		self:cameraMove("down")
-	elseif selPos.y - tileSize < 0 then
+	elseif y < 0 then
 		down()
 		self:cameraMove("up")
-	elseif selPos.x + tileSize > map.size.x then
+	elseif x >= rangeWindow.x then
 		left()
 		self:cameraMove("right")
-	elseif selPos.x - tileSize < 0 then
+	elseif x < 0 then
 		right()
 		self:cameraMove("left")
 	end
@@ -65,50 +50,43 @@ end
 
 function Map:cameraMove( position)
 	if position == "up" then
-		self.camera.y = self.camera.y - 1
+		camera.y = camera.y - 1
 	elseif position == "down" then
-		self.camera.y = self.camera.y + 1
+		camera.y = camera.y + 1
 	elseif position == "left" then
-		self.camera.x = self.camera.x - 1
+		camera.x = camera.x - 1
 	elseif position == "right" then
-		self.camera.x = self.camera.x + 1
+		camera.x = camera.x + 1
 	end
-	if self.camera.x + self.tilesWindow.x > self.tamX then
-		self.camera.x = self.tamX - self.tilesWindow.x
-	elseif self.camera.x < 1 then
-		self.camera.x = 1
-	elseif self.camera.y + self.tilesWindow.y > self.tamY then
-		self.camera.y = self.tamY - self.tilesWindow.y
-	elseif self.camera.y < 1 then
-		self.camera.y = 1
+	if camera.x + rangeWindow.x > self.tamX then
+		camera.x = self.tamX - rangeWindow.x
+	elseif camera.x < 1 then
+		camera.x = 1
+	elseif camera.y + rangeWindow.y > self.tamY then
+		camera.y = self.tamY - rangeWindow.y
+	elseif camera.y < 1 then
+		camera.y = 1
 	end
 end
 
-
 function Map:getActualTile(x,y)
 	actualTile = {
-	x = (x - x%50)/50 + self.camera.x,
-	y = (y - y%50)/50 + self.camera.y
+	x = x + camera.x,
+	y = y + camera.y
 	}
 	return actualTile
 end
 
---	em razão de testes
-function Map:getActualCamera(x,y)
-
-	return self.camera
-end
-	
 function Map:print()
 	white = love.graphics.newImage( "white.png" )
 	black = love.graphics.newImage( "black.png" )
 
-    for i = self.camera.y, self.camera.y + self.tilesWindow.y do
-        for j = self.camera.x , self.camera.x + self.tilesWindow.x do
-            if self.map[i][j] == 0 then
-                love.graphics.draw(black, (j-self.camera.x)*tileSize, (i-self.camera.y)*tileSize)
-            elseif self.map[i][j] == 1 then 
-                love.graphics.draw(white, (j-self.camera.x)*tileSize, (i-self.camera.y)*tileSize)
+    for i = camera.y, camera.y + rangeWindow.y do
+        for j = camera.x , camera.x + rangeWindow.x do
+            if self.map[j][i] == 0 then
+            	printByTile(black, j-camera.x, i-camera.y)
+            elseif self.map[j][i] == 1 then 
+            	printByTile(white, j-camera.x, i-camera.y)
             end
         end
     end
