@@ -16,7 +16,6 @@ function Map:new()
 	x = 16,
 	y = 10
 	}
-	tilesize = 50
 	return setmetatable(self,Map)
 end
 
@@ -30,7 +29,7 @@ function Map:createRandomTileMap(tamX, tamY, nRangeTile)
 		self.map[i] = {}
 		for j = 1,self.tamX do
 			self.map[i][j] = math.random(0,nRangeTile)
-			if(i == tamY or j == tamX or i == 1 or j == 1) then
+			if(i >= tamY or j >= tamX or i == 1 or j == 1) then
 				self.map[i][j] = 3
 			end
 		end
@@ -51,16 +50,16 @@ end
 function Map:cameraPosition(selPos) 
  	if selPos.y + tileSize > map.size.y then
  		up()
-		Map:cameraMove("down")
+		self:cameraMove("down")
 	elseif selPos.y - tileSize < 0 then
 		down()
-		Map:cameraMove("up")
+		self:cameraMove("up")
 	elseif selPos.x + tileSize > map.size.x then
 		left()
-		Map:cameraMove("right")
+		self:cameraMove("right")
 	elseif selPos.x - tileSize < 0 then
 		right()
-		Map:cameraMove("left")
+		self:cameraMove("left")
 	end
 end
 
@@ -103,16 +102,14 @@ end
 function Map:print()
 	white = love.graphics.newImage( "white.png" )
 	black = love.graphics.newImage( "black.png" )
-	love.graphics.scale(2.5, 2.5)
-	size = 20
+
     for i = self.camera.y, self.camera.y + self.tilesWindow.y do
         for j = self.camera.x , self.camera.x + self.tilesWindow.x do
             if self.map[i][j] == 0 then
-                love.graphics.draw(black, (j-self.camera.x)*size, (i-self.camera.y)*size)
+                love.graphics.draw(black, (j-self.camera.x)*tileSize, (i-self.camera.y)*tileSize)
             elseif self.map[i][j] == 1 then 
-                love.graphics.draw(white, (j-self.camera.x)*size, (i-self.camera.y)*size)
+                love.graphics.draw(white, (j-self.camera.x)*tileSize, (i-self.camera.y)*tileSize)
             end
         end
     end
-	love.graphics.scale(0.4, 0.4)
 end

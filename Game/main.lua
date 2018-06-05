@@ -11,8 +11,6 @@ function love.load()
 --	Tamanho do mapa em tiles
 	tamX = 50
 	tamY = 50
---	Em pixeis
-	tileSize = 50
 	map = Map:new()
 	map:createRandomTileMap(tamX, tamY, 1)
 	input = Input:new()

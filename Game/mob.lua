@@ -13,7 +13,7 @@ function Mob:new( iSplayer, x0, y0)
 	}
 end
 
-
+function Mob:
 
 --#TODO
 function Mob:print()
