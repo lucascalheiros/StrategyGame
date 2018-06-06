@@ -26,11 +26,11 @@ function love.load()
 	}
 
 --	Tamanho do mapa em tiles
-	tamX = 50
-	tamY = 50
+	tamX = 20
+	tamY = 20
 	map = Map:new()
 	map:createRandomTileMap(tamX, tamY, 1)
-	mec = Mec:new(tamX,tamY)
+	mec = Mec:new(map)
 	input = Input:new()
 	delayClick = 0.17
 --	se colocados valores fora do mapa será selecionada a area mais próxima
@@ -74,6 +74,11 @@ function left()
 end
 function right() 
 	selPos.x = selPos.x + 1 
+end
+
+function setSelPos(x,y)
+	selPos.x = x
+	selPos.y = y
 end
 
 function printByTile(image, x, y)

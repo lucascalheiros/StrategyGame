@@ -6,8 +6,11 @@ Mob.__index = Mob
 function Mob:new( isPlayer)
 	local mob = {}
 	mob = setmetatable(mob, Mob)
+	mob.maxLife = 100
 	mob.life = 100
-	mob.atk = 50
+	mob.maxMove = 5
+	mob.move = 5
+	mob.atk = 30
 	mob.isPlayer = isPlayer --valor booleano
 	mob.image = love.graphics.newImage( "mob.png" )
 	return mob

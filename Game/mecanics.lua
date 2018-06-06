@@ -4,7 +4,9 @@ Mec = {}
 Mec.__index = Mec
 
 --#TODO
-function Mec:new(tamX, tamY) 
+function Mec:new(map) 
+	tamX = map.tamX
+	tamY = map.tamY
 	self.area = {} -- ligação entre mapa e mecanicas
 	self.enemy = {} -- lista de mobs do inimigo
 	self.player = {} -- lista de mobs do player
@@ -48,6 +50,10 @@ end
 function Mec:machineTurn()
 	for key, value in ipairs(self.enemy) do 
 	end
+end
+
+function Mec:action()
+	
 end
 
 function Mec:info()
