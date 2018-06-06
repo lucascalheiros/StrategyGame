@@ -32,21 +32,7 @@ function Map:setCamPos(tileX,tileY)
 	if camera.y >= self.tamY - rangeWindow.y then camera.y = self.tamY - rangeWindow.y end
 end
 
-function Map:cameraPosition(x,y) 
- 	if y >= rangeWindow.y then
- 		up()
-		self:cameraMove("down")
-	elseif y < 0 then
-		down()
-		self:cameraMove("up")
-	elseif x >= rangeWindow.x then
-		left()
-		self:cameraMove("right")
-	elseif x < 0 then
-		right()
-		self:cameraMove("left")
-	end
-end
+
 
 function Map:cameraMove( position)
 	if position == "up" then

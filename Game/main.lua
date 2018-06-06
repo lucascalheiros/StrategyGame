@@ -36,15 +36,19 @@ function love.load()
 --	se colocados valores fora do mapa será selecionada a area mais próxima
 	map:setCamPos(0,50)
 	selection = love.graphics.newImage( "selection.png" )
+	x=0
+	y=0
+	lastClick = 0
 end
 
 function love.update(dt)
 
-	input:downUp(delayClick,up)
-	input:downDn(delayClick,down)
-	input:downLt(delayClick,left)
-	input:downRt(delayClick,right)
-	map:cameraPosition(selPos.x, selPos.y)
+	input:down("up",delayClick,up)
+	input:down("down",delayClick,down)
+	input:down("left",delayClick,left)
+	input:down("right",delayClick,right)
+	mouse(delayClick);
+	cameraPosition(selPos.x, selPos.y)
 --	map:setCamPos(selPos.x,selPos.y)
 	actualTile = map:getActualTile(selPos.x, selPos.y)
 
@@ -58,6 +62,7 @@ function love.draw()
 	love.graphics.setColor(255, 0, 0)
 	love.graphics.print("Tile "..actualTile.x.." "..actualTile.y, 12, 26)
 	love.graphics.print("Camera "..camera.x.." "..camera.y, 12, 40)
+		love.graphics.print("Mouse "..x.." "..y, 12, 54)
 	love.graphics.setColor(255, 255, 255)
 	love.graphics.rectangle("fill", 0, 500, 800, 150 )
 	mec:info()
@@ -87,5 +92,44 @@ function printByTile(image, x, y)
 	love.graphics.draw(image, posX, posY)
 end
 
+function cameraPosition(x,y) 
+ 	if y >= rangeWindow.y then
+ 		up()
+		map:cameraMove("down")
+	elseif y < 0 then
+		down()
+		map:cameraMove("up")
+	elseif x >= rangeWindow.x then
+		left()
+		map:cameraMove("right")
+	elseif x < 0 then
+		right()
+		map:cameraMove("left")
+	end
+end
 
+function mouse(delay) 
+	if love.mouse.isDown( 1 ) then
+		clickTime = love.timer.getTime()
+		setSelPos(math.floor(x / tileSize),math.floor(y / tileSize))
+		if delay <= (clickTime - lastClick) then
+			lastClick = clickTime
+			x1, y1 = love.mouse.getPosition( )
+			if x1 - tileSize < x then
+				map:cameraMove("right")
+			elseif x1 + tileSize > x then
+				map:cameraMove("left")
+			end
+			if y1 + tileSize > y then
+				map:cameraMove("up")
+			elseif y1 - tileSize < y then
+				map:cameraMove("down")
+		end
+		x1,y1 = x,y
+	end
+
+	else
+		x, y = love.mouse.getPosition( )
+	end
+end
 
