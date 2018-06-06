@@ -109,7 +109,7 @@ function cameraPosition(x,y)
 end
 
 function mouse(delay) 
-	if love.mouse.isDown( 1 ) then
+	if love.mouse.isDown( 1 ) and y <= 500 then
 		clickTime = love.timer.getTime()
 		setSelPos(math.floor(x / tileSize),math.floor(y / tileSize))
 		if delay <= (clickTime - lastClick) then
@@ -120,9 +120,9 @@ function mouse(delay)
 			elseif x1 + tileSize > x then
 				map:cameraMove("left")
 			end
-			if y1 + tileSize > y then
+			if y1 - tileSize > y then
 				map:cameraMove("up")
-			elseif y1 - tileSize < y then
+			elseif y1 + tileSize < y then
 				map:cameraMove("down")
 		end
 		x1,y1 = x,y
