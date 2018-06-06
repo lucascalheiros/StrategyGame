@@ -1,7 +1,6 @@
 require "mob"
 
-Mec = {}
-Mec.__index = Mec
+Mec = Object:extend()
 
 --#TODO
 function Mec:new(map) 
@@ -12,18 +11,17 @@ function Mec:new(map)
 	self.player = {} -- lista de mobs do player
 	playerCounter = 0
 	enemyCounter = 0
-	math.randomseed(os.time())
 	for i = 1, tamY+1 do
 		self.area[i] = {}
 		for j = 1, tamX+1 do
-			chance = math.random(0,20)
+			chance = love.math.random(0,20)
 			if chance > 19 then
 				playerCounter = playerCounter + 1
-				self.player[playerCounter] =  Mob:new(true)
+				self.player[playerCounter] =  Mob(true)
 				self.area[i][j] = self.player[playerCounter]
 			elseif chance < 1 then
 				enemyCounter = enemyCounter + 1
-				self.player[enemyCounter] =  Mob:new(false)
+				self.player[enemyCounter] =  Mob(false)
 				self.area[i][j] =  self.player[enemyCounter]
 			else
 				self.area[i][j] = 0
@@ -68,7 +66,7 @@ function Mec:info()
 	end
 end
 
-function Mec:print()
+function Mec:draw()
     for i = camera.y, camera.y + rangeWindow.y do
         for j = camera.x , camera.x + rangeWindow.x do
             if self.area[j][i] ~= 0 then

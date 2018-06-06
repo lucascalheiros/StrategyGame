@@ -1,19 +1,15 @@
-Mob = {}
-Mob.__index = Mob
+Mob = Object:extend()
 
 
 --#TODO
 function Mob:new( isPlayer)
-	local mob = {}
-	mob = setmetatable(mob, Mob)
-	mob.maxLife = 100
-	mob.life = 100
-	mob.maxMove = 5
-	mob.move = 5
-	mob.atk = 30
-	mob.isPlayer = isPlayer --valor booleano
-	mob.image = love.graphics.newImage( "mob.png" )
-	return mob
+	self.maxLife = 100
+	self.life = 100
+	self.maxMove = 5
+	self.move = 5
+	self.atk = 30
+	self.isPlayer = isPlayer --valor booleano
+	self.image = love.graphics.newImage( "mob.png" )
 end
 
 --#TODO
