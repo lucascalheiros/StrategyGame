@@ -14,41 +14,39 @@ rangeWindow = {
 }
 --	Posição atual do mapa gerada de acordo com a posição da camera e a posição atual da seleção
 actualTile = {
+	x = 1,
+	y = 1
+}
+--	superior esquerda(0,0)
+--	inferior direita(15,9)
+selPos = {
 	x = 0,
 	y = 0
 }
-
 function love.load()
---	superior esquerda(0,0)
---	inferior direita(15,9)
-	selPos = {
-		x = 1,
-		y = 8
-	}
 
 --	Tamanho do mapa em tiles
-	tamX = 20
-	tamY = 20
+	tamX = 30
+	tamY = 30
 	map = Map()
 	map:createRandomTileMap(tamX, tamY, 1)
 	mec = Mec(map)
 	input = Input()
 	delayClick = 0.17
 
---	se colocados valores fora do mapa será selecionada a area mais próxima
-	map:setCamPos(0,50)
+--	posição inferior esquerda
+	map:centerCam(2,tamY - 1)
 	selection = love.graphics.newImage( "selection.png" )
-	x=0
-	y=0
-	lastClick = 0
+
 end
 
 function love.update(dt)
+
 	input:update()
-	map:update()
-	
-	
 	actualTile = map:getActualTile(selPos.x, selPos.y)
+	map:update()
+	mec:update()
+
 
 end
 
@@ -92,9 +90,3 @@ function printByTile(image, x, y)
 	posY = y*50
 	love.graphics.draw(image, posX, posY)
 end
-
-
-
-
-
-

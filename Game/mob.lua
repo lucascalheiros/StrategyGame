@@ -6,25 +6,32 @@ function Mob:new( isPlayer,x0,y0)
 	self.maxLife = 100
 	self.life = 100
 	self.maxMove = 5
-	self.move = 5
+	self.moves = 5
 	self.atk = 30
 	self.isDead = false
-	self.isPlayer = isPlayer --valor booleano
+	self.isPlayer = isPlayer
 	self.image = love.graphics.newImage( "mob.png" )
 	self.pos = {
 	x = x0,
 	y = y0
 	}
+	self.isSelected = false
 end
 
-function Mob:move(moveCost)
-	if moveCost > self.move then
-		return false
-	else
-		self.move = self.move - moveCost
-		return self.move
-	end
+function Mob:selection()
+	self.isSelected = true
+	map:centerCam(self.pos.x, self.pos.y)
 end
+
+function Mob:deSelection()
+	self.isSelected = false
+end
+
+function Mob:drawMoveArea()
+	
+end
+
+
 
 function Mob:atack(enemy)
 	enemy.life = enemy.life - self.atk
@@ -46,6 +53,14 @@ function Mob:newTurn()
 	self.turn = true
 end
 
+function Mob:move()
+	self.pos.x = actualTile.x
+	self.pos.y = actualTile.y
+end
+
+function Mob:update()
+--	self:move()
+end
 
 --#TODO
 function Mob:draw(x,y)
@@ -56,5 +71,9 @@ function Mob:draw(x,y)
 		love.graphics.setColor(color, 0, 0)
 	end
 	printByTile(self.image,x,y);
+	if self.isSelected then
+		love.graphics.setColor(0, 255, 0)
+		printByTile(selection,x,y)
+	end
 	love.graphics.setColor(255, 255, 255)
 end
