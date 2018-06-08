@@ -1,79 +1,73 @@
 require "mob"
 
-Mec = {}
-Mec.__index = Mec
+Mec = Object:extend()
 
 --#TODO
-function Mec:new(map)
-	tamX = map.tamX
-	tamY = map.tamY
-	self.area = {} -- ligação entre mapa e mecanicas
-	self.enemy = {} -- lista de mobs do inimigo
-	self.player = {} -- lista de mobs do player
-	playerCounter = 0
-	enemyCounter = 0
-	math.randomseed(os.time())
-	for i = 1, tamY+1 do
-		self.area[i] = {}
-		for j = 1, tamX+1 do
-			chance = math.random(0,20)
-			if chance > 19 then
-				playerCounter = playerCounter + 1
-				self.player[playerCounter] =  Mob:new(true)
-				self.area[i][j] = self.player[playerCounter]
-			elseif chance < 1 then
-				enemyCounter = enemyCounter + 1
-				self.player[enemyCounter] =  Mob:new(false)
-				self.area[i][j] =  self.player[enemyCounter]
-			else
-				self.area[i][j] = 0
+function Mec:new(map) 
+	tamX = map.tamX -1
+	tamY = map.tamY -1
+	self.mobs = {} -- lista de mobs
+	mobsCounter = 0
+	for i = 1, tamX do
+		for j = 1, tamY do
+			if i ~=1 and j ~= 1 and i ~= tamX and j ~=tamY then
+				chance = love.math.random(0,20)
+				if chance > 19 then
+					mobsCounter = mobsCounter + 1
+					self.mobs[mobsCounter] =  Mob(true,i,j)
+				elseif chance < 1 then
+					mobsCounter = mobsCounter + 1
+					self.mobs[mobsCounter] =  Mob(false,i,j)
+				end
 			end
 		end
 	end
 	self.turn = 0
-	return setmetatable(self, Mec)
 end
 
-function Mec:turn()
-	if sell.turn % 2 == 0 then
-		self:playerTurn()
+
+--	#TODO estados:
+--1. selecionado: entra no loop do mob em questão
+--2. não selecionado: torna possivel a seleção de um mob
+function Mec:update()
+	if self.mob then
+		if input:down("space") then
+			self.mob:deSelection()
+			self.mob = nil
+		end
 	else
-		self:machineTurn()
+		if input:down("kpenter") or input:down("return") then
+			for _, mob in ipairs(self.mobs) do
+				if actualTile.x == mob.pos.x and actualTile.y == mob.pos.y then
+				self.mob = mob
+				self.mob:selection()
+				end
+			end
+		end
 	end
-end
-
-function Mec:playerTurn()
-	for key, value in ipairs(self.player) do
-	end
-end
-
-function Mec:machineTurn()
-	for key, value in ipairs(self.enemy) do
-	end
-end
-
-function Mec:action()
-
 end
 
 function Mec:info()
-	if self.area[actualTile.x][actualTile.y] ~= 0 then
-		love.graphics.setColor(255, 0, 0)
-		if self.area[actualTile.x][actualTile.y].isPlayer then
-			love.graphics.print("Player", 12, 526)
-		else
-			love.graphics.print("Enemy", 12, 526)
+	love.graphics.setColor(255, 0, 0)
+	for _, mob in ipairs(self.mobs) do
+		if mob.pos.x == actualTile.x and mob.pos.y == actualTile.y then
+			if mob.isPlayer then
+				love.graphics.print("Player", 12, 526)
+			else
+				love.graphics.print("Enemy", 12, 526)
+			end
+
 		end
-		love.graphics.setColor(255, 255, 255)
 	end
+	if self.mob then
+		love.graphics.print("Pos x "..self.mob.pos.x, 12, 540)
+		love.graphics.print("Pos y "..self.mob.pos.y, 12, 550)
+	end
+	love.graphics.setColor(255, 255, 255)
 end
 
-function Mec:print()
-    for i = camera.y, camera.y + rangeWindow.y do
-        for j = camera.x , camera.x + rangeWindow.x do
-            if self.area[j][i] ~= 0 then
-				self.area[j][i]:print(j-camera.x,i-camera.y)
-            end
-        end
+function Mec:draw()
+    for _, mob in ipairs(self.mobs) do
+    	mob:draw(mob.pos.x - camera.x, mob.pos.y - camera.y )
     end
 end
