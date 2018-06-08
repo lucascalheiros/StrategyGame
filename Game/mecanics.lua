@@ -4,7 +4,7 @@ Mec = {}
 Mec.__index = Mec
 
 --#TODO
-function Mec:new(map) 
+function Mec:new(map)
 	tamX = map.tamX
 	tamY = map.tamY
 	self.area = {} -- ligação entre mapa e mecanicas
@@ -35,7 +35,7 @@ function Mec:new(map)
 end
 
 function Mec:turn()
-	if sell.turn % 2 == 0 then 
+	if sell.turn % 2 == 0 then
 		self:playerTurn()
 	else
 		self:machineTurn()
@@ -43,17 +43,17 @@ function Mec:turn()
 end
 
 function Mec:playerTurn()
-	for key, value in ipairs(self.player) do 
+	for key, value in ipairs(self.player) do
 	end
 end
 
 function Mec:machineTurn()
-	for key, value in ipairs(self.enemy) do 
+	for key, value in ipairs(self.enemy) do
 	end
 end
 
 function Mec:action()
-	
+
 end
 
 function Mec:info()
@@ -77,8 +77,3 @@ function Mec:print()
         end
     end
 end
-
-
-
-
-

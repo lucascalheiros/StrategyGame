@@ -1,6 +1,12 @@
+Object = require "libs/classic"
+GameObject = require "objects/GameObject"
+Timer = require "libs/EnhancedTimer"
 require "map"
 require "input"
 require "mecanics"
+
+game_loop = {}
+draw_loop = {}
 
 --	Posição superior esquerda da camera do jogo
 camera = {
@@ -39,6 +45,8 @@ function love.load()
 	x=0
 	y=0
 	lastClick = 0
+
+	timer = Timer()
 end
 
 function love.update(dt)
@@ -68,17 +76,17 @@ function love.draw()
 	mec:info()
 end
 
-function up() 
-	selPos.y = selPos.y - 1 
+function up()
+	selPos.y = selPos.y - 1
 end
-function down() 
-	selPos.y = selPos.y + 1 
+function down()
+	selPos.y = selPos.y + 1
 end
-function left() 
-	selPos.x = selPos.x - 1 
+function left()
+	selPos.x = selPos.x - 1
 end
-function right() 
-	selPos.x = selPos.x + 1 
+function right()
+	selPos.x = selPos.x + 1
 end
 
 function setSelPos(x,y)
@@ -92,7 +100,7 @@ function printByTile(image, x, y)
 	love.graphics.draw(image, posX, posY)
 end
 
-function cameraPosition(x,y) 
+function cameraPosition(x,y)
  	if y >= rangeWindow.y then
  		up()
 		map:cameraMove("down")
@@ -108,7 +116,7 @@ function cameraPosition(x,y)
 	end
 end
 
-function mouse(delay) 
+function mouse(delay)
 	if love.mouse.isDown( 1 ) and y <= 500 then
 		clickTime = love.timer.getTime()
 		setSelPos(math.floor(x / tileSize),math.floor(y / tileSize))
@@ -132,4 +140,3 @@ function mouse(delay)
 		x, y = love.mouse.getPosition( )
 	end
 end
-
