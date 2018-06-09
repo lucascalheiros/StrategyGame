@@ -40,7 +40,7 @@ end
 --2. não selecionado: torna possivel a seleção de um mob
 function Mec:update()
 	self.super.update(self, dt)
-	
+
 	actualTile = map:getActualTile(selPos.x, selPos.y)
 	if self.mob then
 		self.mob:update()
@@ -79,7 +79,7 @@ function Mec:info()
 	if self.mob then
 		love.graphics.print("Pos x "..self.mob.pos.x, 12, 540)
 		love.graphics.print("Pos y "..self.mob.pos.y, 12, 550)
-		if self.mob.isDead then love.graphics.print("Dead", 12, 560) end
+		if self.mob.dead then love.graphics.print("Dead", 12, 560) end
 	end
 	love.graphics.setColor(255, 255, 255)
 end

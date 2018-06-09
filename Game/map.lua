@@ -1,5 +1,5 @@
 require "tile"
-Map = Object:extend()
+Map = GameObject:extend()
 
 function Map:new()
 	self.super.new(self)

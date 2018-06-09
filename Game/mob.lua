@@ -1,6 +1,5 @@
 Mob = GameObject:extend()
 
-
 --#TODO
 function Mob:new(isPlayer,x0,y0)
 	self.super.new(self, x0, y0)
@@ -80,8 +79,8 @@ end
 
 function Mob:update()
 	self.super.update(self, dt)
-	
-	if self.isDead then
+
+	if self.dead then
 		return false
 	else
 		if self.isPlayer then
