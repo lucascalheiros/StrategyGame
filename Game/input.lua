@@ -22,8 +22,8 @@ function Input:down(key, delay, func )
 			if func then
 				func()
 			end
-		end
 		return true
+		end
 	end
 	return false
 end
@@ -59,5 +59,5 @@ function Input:update()
 	input:down("down",delayClick,down)
 	input:down("left",delayClick,left)
 	input:down("right",delayClick,right)
-	input:mouseMap(1,delayClick,map)
+--	input:mouseMap(1,delayClick,map)
 end
