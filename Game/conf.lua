@@ -4,7 +4,7 @@ windowSize = {
     sx = 1,
     sy = 1
 }
-Object = require "classic"
+
 tileSize = 50
 
 function love.conf(t)

@@ -42,7 +42,7 @@ function love.load()
 
 --	posição inferior esquerda
 	map:centerCam(2,tamY - 1)
-	selection = love.graphics.newImage( "selection.png" )
+	selection = love.graphics.newImage( "/resources/tiles/selection.png" )
 	selectionBlink = 0 
 	timer = Timer()
 end

@@ -10,7 +10,7 @@ function Mob:new( isPlayer,x0,y0)
 	self.atk = 30
 	self.isDead = false
 	self.isPlayer = isPlayer
-	self.image = love.graphics.newImage( "mob.png" )
+	self.image = love.graphics.newImage( "/resources/tiles/mob.png" )
 	self.pos = {
 	x = x0,
 	y = y0
@@ -65,11 +65,17 @@ function Mob:action()
 	if action then
 		mob = mec:mobAtPos(x,y)
 		if mob then
-			self:attack(mob)
+			if not(mob.isPlayer) then
+				self:attack(mob)
+			end
 		else
-			self.moves = self.moves - 1
-			self.pos.x, self.pos.y = x, y
-			selPos.x, selPos.y = x - camera.x, y - camera.y
+			moveCost = map.map[x][y].moveCost
+			remainMoves = self.moves - moveCost
+			if remainMoves >= 0 then
+				self.moves = remainMoves
+				self.pos.x, self.pos.y = x, y
+				selPos.x, selPos.y = x - camera.x, y - camera.y
+			end
 		end
 		action = false
 	end
