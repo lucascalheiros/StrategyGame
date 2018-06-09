@@ -1,7 +1,13 @@
-Map = GameObject:extend()
+require "tile"
+Map = Object:extend()
 
 function Map:new()
 	self.super.new(self)
+
+	tile = {}
+	tile[1] = Tile( "black.png", 99, 1 )
+	tile[2] = Tile( "white.png", 1, 1 )
+	tile[3] = Tile( "gray.png", 1, 1 )
 end
 
 --#TODO criar mapa de verdade
@@ -12,9 +18,9 @@ function Map:createRandomTileMap(tamX, tamY, nRangeTile)
 	for i = 1,self.tamX do
 		self.map[i] = {}
 		for j = 1,self.tamY do
-			self.map[i][j] = love.math.random(0,nRangeTile)
+			self.map[i][j] = tile[love.math.random(2,3)]
 			if(i == tamX or j == tamY or i == 1 or j == 1) then
-				self.map[i][j] = 3
+				self.map[i][j] = tile[1]
 			end
 		end
 	end
@@ -90,16 +96,9 @@ function Map:update(dt)
 end
 
 function Map:draw()
-	white = love.graphics.newImage( "white.png" )
-	black = love.graphics.newImage( "black.png" )
-
-    for i = camera.x, rangeWindow.x + camera.x - 1 do
-        for j = camera.y , rangeWindow.y + camera.y - 1 do
-            if self.map[i][j] == 0 then
-            	printByTile(black, i - camera.x, j - camera.y)
-            elseif self.map[i][j] == 1 then
-            	printByTile(white, i - camera.x, j - camera.y)
-            end
-        end
-    end
+	for i = camera.x, rangeWindow.x + camera.x - 1 do
+		for j = camera.y , rangeWindow.y + camera.y - 1 do
+			self.map[i][j]:draw( i - camera.x, j - camera.y )
+		end
+	end
 end

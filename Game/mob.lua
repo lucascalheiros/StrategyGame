@@ -11,7 +11,7 @@ function Mob:new(isPlayer,x0,y0)
 	self.moves = 5
 	self.atk = 30
 	self.isPlayer = isPlayer
-	self.image = love.graphics.newImage( "mob.png" )
+	self.image = love.graphics.newImage( "/resources/tiles/mob.png" )
 	self.isSelected = false
 end
 
@@ -28,10 +28,9 @@ function Mob:drawMoveArea()
 
 end
 
-
-
-function Mob:atack(enemy)
+function Mob:attack(enemy)
 	enemy.life = enemy.life - self.atk
+	self.moves = 0
 end
 
 function Mob:isDead()
@@ -41,32 +40,67 @@ function Mob:isDead()
 	end
 end
 
-function Mob:turnEnd()
-	self.move = self.maxMove
-	self.turn = false
-end
 
-function Mob:newTurn()
-	self.turn = true
-end
-
-function Mob:move()
-	self.pos.x = actualTile.x
-	self.pos.y = actualTile.y
+function Mob:action()
+	x, y = actualTile.x,  actualTile.y
+	if input:down("up",delayClick) then
+		y = y - 1
+		action = true
+	end
+	if input:down("down",delayClick) then
+		y = y + 1
+		action = true
+	end
+	if input:down("left",delayClick) then
+		x = x - 1
+		action = true
+	end
+	if input:down("right",delayClick) then
+		x = x + 1
+		action = true
+	end
+	if action then
+		mob = mec:mobAtPos(x,y)
+		if mob then
+			if not(mob.isPlayer) then
+				self:attack(mob)
+			end
+		else
+			moveCost = map.map[x][y].moveCost
+			remainMoves = self.moves - moveCost
+			if remainMoves >= 0 then
+				self.moves = remainMoves
+				self.pos.x, self.pos.y = x, y
+				selPos.x, selPos.y = x - camera.x, y - camera.y
+			end
+		end
+		action = false
+	end
 end
 
 function Mob:update()
 	self.super.update(self, dt)
---	self:move()
+	
+	if self.isDead then
+		return false
+	else
+		if self.isPlayer then
+			if self.moves > 0 then
+				self:action()
+			end
+		else
+--			TODO ações tomadas pela IA do jogo
+		end
+	end
 end
 
 --#TODO
 function Mob:draw(x,y)
 	color = self.life*255/100
 	if self.isPlayer then
-		love.graphics.setColor(0, 0, color)
+		love.graphics.setColor(0, 0, 255)
 	else
-		love.graphics.setColor(color, 0, 0)
+		love.graphics.setColor(255, 0, 0)
 	end
 	printByTile(self.image,x,y);
 	if self.isSelected then
