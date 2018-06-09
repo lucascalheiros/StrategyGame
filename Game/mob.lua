@@ -1,20 +1,17 @@
-Mob = Object:extend()
+Mob = GameObject:extend()
 
 
 --#TODO
-function Mob:new( isPlayer,x0,y0)
+function Mob:new(isPlayer,x0,y0)
+	self.super.new(self, x0, y0)
+
 	self.maxLife = 100
 	self.life = 100
 	self.maxMove = 5
 	self.moves = 5
 	self.atk = 30
-	self.isDead = false
 	self.isPlayer = isPlayer
 	self.image = love.graphics.newImage( "mob.png" )
-	self.pos = {
-	x = x0,
-	y = y0
-	}
 	self.isSelected = false
 end
 
@@ -28,7 +25,7 @@ function Mob:deSelection()
 end
 
 function Mob:drawMoveArea()
-	
+
 end
 
 
@@ -40,7 +37,7 @@ end
 function Mob:isDead()
 	if self.life <= 0 then
 		self.life = 0
-		self.isDead = true
+		self.dead = true
 	end
 end
 
@@ -59,13 +56,14 @@ function Mob:move()
 end
 
 function Mob:update()
+	self.super.update(self, dt)
 --	self:move()
 end
 
 --#TODO
 function Mob:draw(x,y)
 	color = self.life*255/100
-	if self.isPlayer then 
+	if self.isPlayer then
 		love.graphics.setColor(0, 0, color)
 	else
 		love.graphics.setColor(color, 0, 0)

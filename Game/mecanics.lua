@@ -1,9 +1,11 @@
 require "mob"
 
-Mec = Object:extend()
+Mec = GameObject:extend()
 
 --#TODO
-function Mec:new(map) 
+function Mec:new(map)
+	self.super.new(self)
+
 	tamX = map.tamX -1
 	tamY = map.tamY -1
 	self.mobs = {} -- lista de mobs
@@ -29,7 +31,9 @@ end
 --	#TODO estados:
 --1. selecionado: entra no loop do mob em questão
 --2. não selecionado: torna possivel a seleção de um mob
-function Mec:update()
+function Mec:update(dt)
+	self.super.update(self, dt)
+
 	if self.mob then
 		if input:down("space") then
 			self.mob:deSelection()

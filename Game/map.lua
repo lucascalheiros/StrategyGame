@@ -1,6 +1,7 @@
-Map = Object:extend()
+Map = GameObject:extend()
 
 function Map:new()
+	self.super.new(self)
 end
 
 --#TODO criar mapa de verdade
@@ -19,7 +20,7 @@ function Map:createRandomTileMap(tamX, tamY, nRangeTile)
 	end
 end
 
-function Map:centerCam(x,y) 
+function Map:centerCam(x,y)
 	camera.x = x + math.floor(-rangeWindow.x/2) --8
 	camera.y = y + math.floor(-rangeWindow.y/2) --5
 	if camera.x < 1 then camera.x = 1 end
@@ -64,7 +65,7 @@ function Map:getActualTile(x,y)
 	return actualTile
 end
 
-function Map:cameraPosition() 
+function Map:cameraPosition()
 	if selPos.y >= rangeWindow.y - 1 then
 		selPos.y = selPos.y - 1
 		map:cameraMove("down")
@@ -83,7 +84,8 @@ function Map:cameraPosition()
 	end
 end
 
-function Map:update()
+function Map:update(dt)
+	self.super.update(self, dt)
 	self:cameraPosition()
 end
 
@@ -95,7 +97,7 @@ function Map:draw()
         for j = camera.y , rangeWindow.y + camera.y - 1 do
             if self.map[i][j] == 0 then
             	printByTile(black, i - camera.x, j - camera.y)
-            elseif self.map[i][j] == 1 then 
+            elseif self.map[i][j] == 1 then
             	printByTile(white, i - camera.x, j - camera.y)
             end
         end

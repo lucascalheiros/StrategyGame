@@ -1,6 +1,7 @@
 Object = require "libs/classic"
 GameObject = require "objects/GameObject"
 Timer = require "libs/EnhancedTimer"
+GameLoop = require "gameLoop"
 require "map"
 require "input"
 require "mecanics"
@@ -49,10 +50,10 @@ end
 
 function love.update(dt)
 
-	input:update()
+	input:update(dt)
 	actualTile = map:getActualTile(selPos.x, selPos.y)
-	map:update()
-	mec:update()
+	map:update(dt)
+	mec:update(dt)
 
 
 end

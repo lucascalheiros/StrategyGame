@@ -4,7 +4,11 @@ function GameObject:new(x, y, opts)
     local opts = opts or {}
     if opts then for k, v in pairs(opts) do self[k] = v end end
 
-    self.x, self.y = x, y
+    self.pos = {
+        x = x or 0,
+        y = y or 0
+    }
+
     self.dead = false
     self.timer = Timer()
 end
@@ -14,7 +18,6 @@ function GameObject:update(dt)
 end
 
 function GameObject:draw()
-
 end
 
 function GameObject:destroy()
