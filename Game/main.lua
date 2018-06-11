@@ -85,6 +85,11 @@ function right()
 	selPos.x = selPos.x + 1
 end
 
+function selToMousePos()
+	setSelPos(math.floor(input.mouse.x / tileSize),math.floor(input.mouse.y / tileSize))
+end
+
+
 function setSelPos(x,y)
 	selPos.x = x
 	selPos.y = y

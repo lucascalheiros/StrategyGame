@@ -9,17 +9,27 @@ function Mec:new(map)
 	tamX = map.tamX -1
 	tamY = map.tamY -1
 	self.mobs = {} -- lista de mobs
+	self.enemies = {}
+	self.plays = {}
+	playsCounter = 0
+	enemiesCounter = 0
 	mobsCounter = 0
 	for i = 1, tamX do
 		for j = 1, tamY do
 			if i ~=1 and j ~= 1 and i ~= tamX and j ~=tamY then
 				chance = love.math.random(0,20)
 				if chance > 19 then
+					playsCounter = playsCounter + 1
 					mobsCounter = mobsCounter + 1
-					self.mobs[mobsCounter] =  Mob(true,i,j)
+					mob = Mob(true,i,j)
+					self.mobs[mobsCounter] = mob
+					self.plays[playsCounter] = mob
 				elseif chance < 1 then
+					mob = Mob(false,i,j)
+					enemiesCounter = enemiesCounter + 1
 					mobsCounter = mobsCounter + 1
-					self.mobs[mobsCounter] =  Mob(false,i,j)
+					self.mobs[mobsCounter] =  mob
+					self.enemies[enemiesCounter] = mob
 				end
 			end
 		end
@@ -43,18 +53,18 @@ function Mec:update()
 
 	actualTile = map:getActualTile(selPos.x, selPos.y)
 	if self.mob then
-		self.mob:update()
-		if input:down("space") then
+		if not( self.mob:update() ) or input:down("space") then 
 			self.mob:deSelection()
 			self.mob = nil
 		end
 	else
+		input:mouseMap(1,-1,selToMousePos)
 		input:down("up",delayClick,up)
 		input:down("down",delayClick,down)
 		input:down("left",delayClick,left)
 		input:down("right",delayClick,right)
 		if input:down("kpenter") or input:down("return") then
-			for _, mob in ipairs(self.mobs) do
+			for _, mob in ipairs(self.plays) do
 				if actualTile.x == mob.pos.x and actualTile.y == mob.pos.y then
 				self.mob = mob
 				self.mob:selection()
@@ -64,6 +74,7 @@ function Mec:update()
 	end
 end
 
+--	TODO as informações devem ser tratadas pela classe bar
 function Mec:info()
 	love.graphics.setColor(255, 0, 0)
 	for _, mob in ipairs(self.mobs) do
@@ -83,7 +94,6 @@ function Mec:info()
 	end
 	love.graphics.setColor(255, 255, 255)
 end
-
 
 function Mec:drawSelector()
 	if self.mob then
