@@ -6,9 +6,6 @@ require "map"
 require "input"
 require "mecanics"
 
-game_loop = {}
-draw_loop = {}
-
 --	Posição superior esquerda da camera do jogo
 camera = {
 	x = 1,
@@ -53,8 +50,6 @@ function love.update(dt)
 
 	map:update(dt)
 	mec:update(dt)
-
-
 end
 
 function love.draw()
