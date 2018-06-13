@@ -90,8 +90,25 @@ function Map:cameraPosition()
 	end
 end
 
+function Map:mouseSlide(x,y)
+	x, y = input.mouse.x, input.mouse.y
+	x1, y1 = love.mouse.getPosition( )
+	if x1 +75< x then
+		map:cameraMove("right")
+	elseif x1 -75> x then
+		map:cameraMove("left")
+	end
+	if y1 -75 > y then
+		map:cameraMove("up")
+	elseif y1 +75< y then
+		map:cameraMove("down")
+	end
+	x1,y1 = x,y
+end
+
 function Map:update(dt)
 	self.super.update(self, dt)
+	input:mouseMap(1,0.17,self.mouseSlide)
 	self:cameraPosition()
 end
 

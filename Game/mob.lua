@@ -86,10 +86,13 @@ function Mob:update()
 		if self.isPlayer then
 			if self.moves > 0 then
 				self:action()
+			else
+				return false
 			end
 		else
 --			TODO ações tomadas pela IA do jogo
 		end
+		return true
 	end
 end
 

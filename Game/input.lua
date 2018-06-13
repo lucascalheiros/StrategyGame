@@ -2,6 +2,10 @@ Input = Object:extend()
 
 function Input:new()
 	self.lastClick = 0
+	self.mouse = {
+	x = 0,
+	y = 0
+	}
 end
 
 function Input:delay(delay, func) 
@@ -28,36 +32,22 @@ function Input:down(key, delay, func )
 	return false
 end
 
-function Input:mouseMap(key,delay,map) 
-	if love.mouse.isDown( 1 ) and y <= 500 then
+--	 Entrada do mose que funciona apenas da area do mapa
+function Input:mouseMap(key,delay,func) 
+	if love.mouse.isDown( 1 ) and self.mouse.y <= 500 then
 		clickTime = love.timer.getTime()
-		setSelPos(math.floor(x / tileSize),math.floor(y / tileSize))
 		if delay <= (clickTime - self.lastClick) then
-			self.lastClick = clickTime
-			x1, y1 = love.mouse.getPosition( )
-			if x1 +75< x then
-				map:cameraMove("right")
-			elseif x1 -75> x then
-				map:cameraMove("left")
+			if delay ~= -1 then
+				self.lastClick = clickTime
 			end
-			if y1 -75 > y then
-				map:cameraMove("up")
-			elseif y1 +75< y then
-				map:cameraMove("down")
+			if func then
+				func()
+			end
+			return true
 		end
-		x1,y1 = x,y
-	end
-
 	else
-		x, y = love.mouse.getPosition( )
+		self.mouse.x, self.mouse.y = love.mouse.getPosition( )
+		return false
 	end
 end
 
-
-function Input:update()
-	input:down("up",delayClick,up)
-	input:down("down",delayClick,down)
-	input:down("left",delayClick,left)
-	input:down("right",delayClick,right)
---	input:mouseMap(1,delayClick,map)
-end
