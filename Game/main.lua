@@ -7,9 +7,6 @@ require "input"
 require "mecanics"
 require "bar"
 
-game_loop = {}
-draw_loop = {}
-
 --	Posição superior esquerda da camera do jogo
 camera = {
 	x = 1,
