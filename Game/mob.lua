@@ -3,12 +3,13 @@ Mob = GameObject:extend()
 --#TODO
 function Mob:new(isPlayer,x0,y0)
 	self.super.new(self, x0, y0)
-
+	self.name = "Knight"
 	self.maxLife = 100
 	self.life = 100
 	self.maxMove = 5
 	self.moves = 5
 	self.atk = 30
+	self.def = 0
 	self.isPlayer = isPlayer
 	self.image = love.graphics.newImage( "/resources/tiles/mob.png" )
 	self.isSelected = false
@@ -98,11 +99,11 @@ end
 
 --#TODO
 function Mob:draw(x,y)
-	color = self.life*255/100
+	color = self.life/100
 	if self.isPlayer then
-		love.graphics.setColor(0, 0, 255)
+		love.graphics.setColor(0, 0, color)
 	else
-		love.graphics.setColor(255, 0, 0)
+		love.graphics.setColor(color, 0, 0)
 	end
 	printByTile(self.image,x,y);
 	if self.isSelected then

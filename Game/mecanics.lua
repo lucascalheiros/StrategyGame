@@ -43,6 +43,7 @@ function Mec:mobAtPos(x,y)
 			return mob
 		end
 	end
+	return nil
 end
 
 --	#TODO estados:

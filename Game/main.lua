@@ -5,6 +5,7 @@ GameLoop = require "gameLoop"
 require "map"
 require "input"
 require "mecanics"
+require "bar"
 
 game_loop = {}
 draw_loop = {}
@@ -39,8 +40,8 @@ function love.load()
 	map:createRandomTileMap(tamX, tamY, 1)
 	mec = Mec(map)
 	input = Input()
+	bar = Bar()
 	delayClick = 0.17
-
 --	posição inferior esquerda
 	map:centerCam(2,tamY - 1)
 	selection = love.graphics.newImage( "/resources/tiles/selection.png" )
@@ -53,7 +54,7 @@ function love.update(dt)
 
 	map:update(dt)
 	mec:update(dt)
-
+	bar:update(dt)
 
 end
 
@@ -61,14 +62,13 @@ function love.draw()
 
 	map:draw()
 	mec:draw()
-
+	bar:draw()
 	love.graphics.setColor(255, 0, 0)
 	love.graphics.print("Tile "..actualTile.x.." "..actualTile.y, 12, 26)
 	love.graphics.print("Camera "..camera.x.." "..camera.y, 12, 40)
 --	love.graphics.print("Mouse "..x.." "..y, 12, 54)
-	love.graphics.setColor(255, 255, 255)
-	love.graphics.rectangle("fill", 0, 500, 800, 150 )
-	mec:info()
+	love.graphics.setColor(1, 1, 1)
+--	mec:info()
 end
 
 

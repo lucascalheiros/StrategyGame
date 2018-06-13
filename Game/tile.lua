@@ -3,6 +3,7 @@ Tile = Object:extend()
 
 function Tile:new( name, moveCost, defBonus )
 	self.image = love.graphics.newImage( "/resources/tiles/"..name )
+	self.name = name
 	self.moveCost = moveCost
 	self.defBonus = defBonus
 end
