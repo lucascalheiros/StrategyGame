@@ -49,12 +49,12 @@ end
 --	#TODO estados:
 --1. selecionado: entra no loop do mob em questão
 --2. não selecionado: torna possivel a seleção de um mob
-function Mec:update()
+function Mec:update(dt)
 	self.super.update(self, dt)
 
 	actualTile = map:getActualTile(selPos.x, selPos.y)
 	if self.mob then
-		if not( self.mob:update() ) or input:down("space") then 
+		if not( self.mob:update(dt) ) or input:down("space") then
 			self.mob:deSelection()
 			self.mob = nil
 		end
