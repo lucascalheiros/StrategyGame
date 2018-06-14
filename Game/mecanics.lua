@@ -54,7 +54,7 @@ function Mec:update(dt)
 
 	actualTile = map:getActualTile(selPos.x, selPos.y)
 	if self.mob then
-		if not( self.mob:update(dt) ) or input:down("space") then
+		if not( self.mob:update(dt) ) or input:isMouseReleased() or input:down("space") then 
 			self.mob:deSelection()
 			self.mob = nil
 		end
@@ -64,7 +64,7 @@ function Mec:update(dt)
 		input:down("down",delayClick,down)
 		input:down("left",delayClick,left)
 		input:down("right",delayClick,right)
-		if input:down("kpenter") or input:down("return") then
+		if input:isMouseReleased() or input:down("kpenter") or input:down("return") then
 			for _, mob in ipairs(self.plays) do
 				if actualTile.x == mob.pos.x and actualTile.y == mob.pos.y then
 				self.mob = mob
@@ -73,27 +73,6 @@ function Mec:update(dt)
 			end
 		end
 	end
-end
-
---	TODO as informações devem ser tratadas pela classe bar
-function Mec:info()
-	love.graphics.setColor(255, 0, 0)
-	for _, mob in ipairs(self.mobs) do
-		if mob.pos.x == actualTile.x and mob.pos.y == actualTile.y then
-			if mob.isPlayer then
-				love.graphics.print("Player", 12, 526)
-			else
-				love.graphics.print("Enemy", 12, 526)
-			end
-			love.graphics.print("Life: "..mob.life, 60, 526)
-		end
-	end
-	if self.mob then
-		love.graphics.print("Pos x "..self.mob.pos.x, 12, 540)
-		love.graphics.print("Pos y "..self.mob.pos.y, 12, 550)
-		if self.mob.dead then love.graphics.print("Dead", 12, 560) end
-	end
-	love.graphics.setColor(255, 255, 255)
 end
 
 function Mec:drawSelector()

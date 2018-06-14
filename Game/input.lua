@@ -6,6 +6,7 @@ function Input:new()
 	x = 0,
 	y = 0
 	}
+	self.mouseReleased = false
 end
 
 function Input:delay(delay, func) 
@@ -48,6 +49,20 @@ function Input:mouseMap(key,delay,func)
 	else
 		self.mouse.x, self.mouse.y = love.mouse.getPosition( )
 		return false
+	end
+end
+
+function Input:isMouseReleased()
+	if self.mouseReleased then
+		self.mouseReleased = false
+		return true
+	end
+	return false
+end
+
+function love.mousereleased( x, y, button, istouch )
+	if button == 1 then
+		input.mouseReleased = true 
 	end
 end
 
