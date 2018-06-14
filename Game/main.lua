@@ -6,6 +6,7 @@ require "map"
 require "input"
 require "mecanics"
 require "bar"
+require "utils"
 
 --	Posição superior esquerda da camera do jogo
 camera = {

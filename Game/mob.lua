@@ -40,6 +40,47 @@ function Mob:isDead()
 	end
 end
 
+function Mob:enemyBehaviour()
+	local target = mec.plays[1]
+
+	for _, player in ipairs(mec.plays) do
+		if distance(self.pos.x, self.pos.y, target.pos.x, target.pos.y)
+		>= distance(self.pos.x, self.pos.y, player.pos.x, player.pos.y) then
+			target = player
+		end
+	end
+
+	for i = 1, 5 do
+		local x, y = self.pos.x, self.pos.y
+		if self.pos.x > target.pos.x then
+			x = x - 1
+		elseif self.pos.x < target.pos.x then
+			x = x + 1
+		else
+			if self.pos.y > target.pos.y then
+				y = y - 1
+			else
+				y = y + 1
+			end
+		end
+
+		local mob = mec:mobAtPos(x,y)
+		if mob then
+			if mob.isPlayer then
+				self:attack(mob)
+				break
+			end
+		else
+			local moveCost = map.map[x][y].moveCost
+			local remainMoves = self.moves - moveCost
+			if remainMoves >= 0 then
+				self.moves = remainMoves
+				self.pos.x, self.pos.y = x, y
+				selPos.x, selPos.y = x - camera.x, y - camera.y
+			end
+		end
+	end
+end
 
 function Mob:action()
 	x, y = actualTile.x,  actualTile.y
@@ -78,7 +119,7 @@ function Mob:action()
 	end
 end
 
-function Mob:update()
+function Mob:update(dt)
 	self.super.update(self, dt)
 
 	if self.dead then
@@ -91,7 +132,7 @@ function Mob:update()
 				return false
 			end
 		else
---			TODO ações tomadas pela IA do jogo
+			self:enemyBehaviour()
 		end
 		return true
 	end
