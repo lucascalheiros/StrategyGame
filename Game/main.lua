@@ -32,8 +32,8 @@ selPos = {
 function love.load()
 
 --	Tamanho do mapa em tiles
-	tamX = 30
-	tamY = 30
+	tamX = 16
+	tamY = 10
 	map = Map()
 	map:createRandomTileMap(tamX, tamY, 1)
 	mec = Mec(map)

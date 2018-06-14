@@ -30,6 +30,7 @@ end
 
 function Mob:attack(enemy)
 	enemy.life = enemy.life - self.atk
+	enemy:isDead()
 	self.moves = 0
 end
 
@@ -102,8 +103,8 @@ function Mob:action()
 	end
 	if action then
 		mob = mec:mobAtPos(x,y)
-		if mob then
-			if not(mob.isPlayer) then
+		if mob and not mob.dead then
+			if not mob.isPlayer then
 				self:attack(mob)
 			end
 		else
@@ -117,6 +118,10 @@ function Mob:action()
 		end
 		action = false
 	end
+end
+
+function Mob:endTurn()
+	self.moves = self.maxMove
 end
 
 function Mob:update(dt)

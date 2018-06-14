@@ -34,7 +34,8 @@ function Mec:new(map)
 			end
 		end
 	end
-	self.turn = 0
+	self.turn = true
+	self.count = 1
 end
 
 function Mec:mobAtPos(x,y)
@@ -51,27 +52,42 @@ end
 --2. não selecionado: torna possivel a seleção de um mob
 function Mec:update(dt)
 	self.super.update(self, dt)
-
-	actualTile = map:getActualTile(selPos.x, selPos.y)
-	if self.mob then
-		if not( self.mob:update(dt) ) or input:isMouseReleased() or input:down("space") then 
-			self.mob:deSelection()
-			self.mob = nil
-		end
-	else
-		input:mouseMap(1,-1,selToMousePos)
-		input:down("up",delayClick,up)
-		input:down("down",delayClick,down)
-		input:down("left",delayClick,left)
-		input:down("right",delayClick,right)
-		if input:isMouseReleased() or input:down("kpenter") or input:down("return") then
-			for _, mob in ipairs(self.plays) do
-				if actualTile.x == mob.pos.x and actualTile.y == mob.pos.y then
-				self.mob = mob
-				self.mob:selection()
+	if self.turn then
+		actualTile = map:getActualTile(selPos.x, selPos.y)
+		if self.mob then
+			if not( self.mob:update(dt) ) or input:isMouseReleased() or input:down("space") then 
+				self.mob:deSelection()
+				self.mob = nil
+			end
+		else
+			input:mouseMap(1,-1,selToMousePos)
+			input:down("up",delayClick,up)
+			input:down("down",delayClick,down)
+			input:down("left",delayClick,left)
+			input:down("right",delayClick,right)
+			if input:isMouseReleased() or input:down("kpenter") then
+				for _, mob in ipairs(self.plays) do
+					if actualTile.x == mob.pos.x and actualTile.y == mob.pos.y then
+					self.mob = mob
+					self.mob:selection()
+					end
 				end
 			end
 		end
+	else
+		if self.count <= #self.enemies then
+			self.enemies[self.count]:update()
+			self.count = self.count + 1
+		else
+			self.count = 1
+			self.turn = true
+			for _,mob in ipairs(self.mobs) do
+				if not mob.dead then mob:endTurn() end
+			end
+		end
+	end
+	if input:down("return") then
+		self.turn = false
 	end
 end
 
