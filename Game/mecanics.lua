@@ -55,7 +55,7 @@ function Mec:update(dt)
 	if self.turn then
 		actualTile = map:getActualTile(selPos.x, selPos.y)
 		if self.mob then
-			if not( self.mob:update(dt) ) or input:isMouseReleased() or input:down("space") then 
+			if not( self.mob:update(dt) ) or input:isMouseReleased() or input:down("space") then
 				self.mob:deSelection()
 				self.mob = nil
 			end

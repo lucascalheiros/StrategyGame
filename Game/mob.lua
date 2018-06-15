@@ -42,42 +42,51 @@ function Mob:isDead()
 end
 
 function Mob:enemyBehaviour()
-	local target = mec.plays[1]
+	local target = nil
 
 	for _, player in ipairs(mec.plays) do
-		if distance(self.pos.x, self.pos.y, target.pos.x, target.pos.y)
-		>= distance(self.pos.x, self.pos.y, player.pos.x, player.pos.y) then
-			target = player
+		if target == nil then
+			if player.dead == false then
+				target = player
+			end
+		else
+			if distance(self.pos.x, self.pos.y, target.pos.x, target.pos.y)
+			>= distance(self.pos.x, self.pos.y, player.pos.x, player.pos.y)
+			and player.dead == false then
+				target = player
+			end
 		end
 	end
 
-	for i = 1, 5 do
-		local x, y = self.pos.x, self.pos.y
-		if self.pos.x > target.pos.x then
-			x = x - 1
-		elseif self.pos.x < target.pos.x then
-			x = x + 1
-		else
-			if self.pos.y > target.pos.y then
-				y = y - 1
+	if target then
+		for i = 1, 5 do
+			local x, y = self.pos.x, self.pos.y
+			if self.pos.x > target.pos.x then
+				x = x - 1
+			elseif self.pos.x < target.pos.x then
+				x = x + 1
 			else
-				y = y + 1
+				if self.pos.y > target.pos.y then
+					y = y - 1
+				else
+					y = y + 1
+				end
 			end
-		end
 
-		local mob = mec:mobAtPos(x,y)
-		if mob then
-			if mob.isPlayer then
-				self:attack(mob)
-				break
-			end
-		else
-			local moveCost = map.map[x][y].moveCost
-			local remainMoves = self.moves - moveCost
-			if remainMoves >= 0 then
-				self.moves = remainMoves
-				self.pos.x, self.pos.y = x, y
-				selPos.x, selPos.y = x - camera.x, y - camera.y
+			local mob = mec:mobAtPos(x,y)
+			if mob and mob.dead == false then
+				if mob.isPlayer then
+					self:attack(mob)
+					break
+				end
+			else
+				local moveCost = map.map[x][y].moveCost
+				local remainMoves = self.moves - moveCost
+				if remainMoves >= 0 then
+					self.moves = remainMoves
+					self.pos.x, self.pos.y = x, y
+					selPos.x, selPos.y = x - camera.x, y - camera.y
+				end
 			end
 		end
 	end
@@ -141,6 +150,8 @@ function Mob:update(dt)
 		end
 		return true
 	end
+
+	self:isDead()
 end
 
 --#TODO
