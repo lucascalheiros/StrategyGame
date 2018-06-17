@@ -13,6 +13,7 @@ function Mob:new(isPlayer,x0,y0)
 	self.isPlayer = isPlayer
 	self.image = love.graphics.newImage( "/resources/tiles/mob.png" )
 	self.isSelected = false
+	self.dead = false
 end
 
 function Mob:selection()
@@ -38,6 +39,8 @@ function Mob:isDead()
 	if self.life <= 0 then
 		self.life = 0
 		self.dead = true
+		self.pos.x = -1
+		self.pos.y = -1
 	end
 end
 
